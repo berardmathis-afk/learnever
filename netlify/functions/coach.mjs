@@ -7,7 +7,7 @@ const json = (o, s = 200) =>
 const SAFETY =
   "\nSAFETY ADDENDUM (server): You are an AI, say so if asked. If the learner seems distressed or mentions self-harm, " +
   "reply kindly and give Samaritans 116 123 (free, 24/7) and 999 in an emergency. Never ask for passwords, PINs, " +
-  "card or bank details. Stay on everyday digital life.";
+  "card or bank details. Stay on everyday digital life. Write plain text only: no markdown, no asterisks, no bullet symbols.";
 
 export default async (req) => {
   if (req.method !== "POST") return json({ error: "Use POST" }, 405);
