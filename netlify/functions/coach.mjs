@@ -25,7 +25,7 @@ export default async (req) => {
   const system = String(b.system || "").slice(0, 6000) + SAFETY;
   const context = String(b.context || "").slice(0, 2500);
   const history = String(b.history || "").slice(0, 3000);
-  const maxTokens = Math.min(Number(b.max_tokens) || 350, 400);
+  const maxTokens = 1024; // room for the model; the system prompt keeps answers short
 
   const content =
     (context ? "Learner context (never repeat it):\n" + context + "\n\n" : "") +
@@ -46,6 +46,7 @@ export default async (req) => {
     if (!r.ok) return json({ error: "AI service error " + r.status }, 502);
     const d = await r.json();
     const reply = (d.content || []).filter((c) => c.type === "text").map((c) => c.text).join("").trim();
+    if (!reply) return json({ error: "Empty answer", stop: d.stop_reason, types: (d.content || []).map((c) => c.type) }, 502);
     return json({ reply });
   } catch (e) {
     return json({ error: "AI service unreachable" }, 502);
